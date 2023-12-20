@@ -17,7 +17,7 @@ class StatePostPage extends StatefulWidget{
 
 class PostPage extends State<StatePostPage> {
   String val = "nyan";
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,7 +32,7 @@ class PostPage extends State<StatePostPage> {
                   onPressed: () {
                     Api().postData(widget.image);
 
-                    setState(() async{
+                    setState(() async{  //ほんまにここでやることなんか？
                       String values = "";
 
                       List<Map<String, dynamic>> databaseContent = await dblist().getData();
