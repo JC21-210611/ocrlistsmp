@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
+import 'resultUi.dart';
 
 class done extends StatelessWidget {
   const done(this.image, {Key? key}) : super(key: key);
@@ -76,7 +77,7 @@ class done extends StatelessWidget {
                         },
                       ),
                     ),
-                    /*Container(
+                    Container(
                       width: 100,
                       height: 50,
                       margin: EdgeInsets.fromLTRB(7, 5, 20, 15),
@@ -101,7 +102,7 @@ class done extends StatelessWidget {
                           );
                         },
                       ),
-                    )*/
+                    ),
                   ],
                 ),
               ],

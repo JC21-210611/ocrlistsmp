@@ -9,16 +9,24 @@ import 'Database.dart';
 class StatePostPage extends StatefulWidget{
   const StatePostPage(this.image, {Key? key}) : super(key: key);
   final XFile image;
+
   @override
-  State<StatePostPage> createState() {
-    return PostPage();
-  }
+    PostPage createState() => PostPage();
 }
 
 class PostPage extends State<StatePostPage> {
   String val = "nyan";
 
   @override
+  void initState() {
+    super.initState();
+    _postData();
+  }
+
+  void _postData() {
+    Api.instance.postData(widget.image);
+  }
+
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
@@ -29,15 +37,16 @@ class PostPage extends State<StatePostPage> {
             children: [
               Image.file(File(path.join(widget.image.path))),
               TextButton(
-                  onPressed: () {
-                    Api().postData(widget.image);
+                  onPressed: () async{
+                    await Api.instance.postData(widget.image);
 
-                    setState(() async{  //ほんまにここでやることなんか？
+                    List<Map<String, dynamic>> databaseContent = await dblist().getData();
+                    List<String> contentList = await Api.instance.getContentList();
+                    print("ボタン押されたから持ってきたcontent；$contentList");
+
+                    setState(() {  //ほんまにここでやることなんか？
+                      print("ボタン押されたからセットステートするで");
                       String values = "";
-
-                      List<Map<String, dynamic>> databaseContent = await dblist().getData();
-                      List<String> contentList = await Api().getContentList();
-
 
                       for(Map<String, dynamic> dbc in databaseContent){
                         for(String s in contentList) {

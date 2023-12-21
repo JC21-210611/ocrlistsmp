@@ -7,8 +7,10 @@ import 'package:image_picker/image_picker.dart';
 
 class Api{
   static List<String> contentList = [""];
+  Api._();
+  static final Api instance = Api._();
 
-  void postData(XFile img) async {
+  Future<void> postData(XFile img) async {
     print("パス：" + img.path);
     File file = File(img.path);
     // 画像のバイナリデータを読み込みます.
@@ -38,19 +40,19 @@ class Api{
 
     if (contentMoji.contains("原材料")) {
       //原材料後、内容量までをString型で保持
-      RegExp moji = RegExp(r"原材料名(.*?)內容量(.*)");
-      RegExp moji2 = RegExp(r"原材料名(.*)");
-      RegExpMatch? matchMoji = moji.firstMatch(contentMoji);
-      RegExpMatch? matchMoji2 = moji2.firstMatch(contentMoji);
+      RegExp genNai = RegExp(r"原材料名(.*?)內容量(.*)");
+      RegExp gen = RegExp(r"原材料名(.*)");
+      RegExpMatch? matchGenNai = genNai.firstMatch(contentMoji);
+      RegExpMatch? matchGen = gen.firstMatch(contentMoji);
 
-      debugPrint("マッチしたか1:$matchMoji");
-      debugPrint("マッチしたか2:$matchMoji2");
+      debugPrint("マッチしたか1:$matchGenNai");
+      debugPrint("マッチしたか2:$matchGen");
 
-      if (matchMoji != null) {
-        genStr = matchMoji.group(1)!.trim();
+      if (matchGenNai != null) {
+        genStr = matchGenNai.group(1)!.trim();
         debugPrint("原材料後1：$genStr");
-      } else if (matchMoji2 != null) {
-        genStr = matchMoji2.group(1)!.trim();
+      } else if (matchGen != null) {
+        genStr = matchGen.group(1)!.trim();
         debugPrint("原材料後2：$genStr");
       }
     } else {
@@ -66,7 +68,7 @@ class Api{
 
     debugPrint("読み込んだ文字：$contentList");
   }
-   Future<List<String>> getContentList() async{
+   List<String> getContentList(){
     return contentList;
   }
 }
