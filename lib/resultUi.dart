@@ -15,7 +15,8 @@ class StatePostPage extends StatefulWidget{
 }
 
 class PostPage extends State<StatePostPage> {
-  String val = "nyan";
+  String val = "cat";
+  List<String> vals = ["dog"];
 
   @override
   void initState() {
@@ -27,6 +28,7 @@ class PostPage extends State<StatePostPage> {
     Api.instance.postData(widget.image);
   }
 
+  bool _isLoading = false;
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
@@ -38,6 +40,10 @@ class PostPage extends State<StatePostPage> {
               Image.file(File(path.join(widget.image.path))),
               TextButton(
                   onPressed: () async{
+                    setState(() {
+                      _isLoading = true;
+                    });
+
                     await Api.instance.postData(widget.image);
 
                     List<Map<String, dynamic>> databaseContent = await dblist().getData();
@@ -63,10 +69,58 @@ class PostPage extends State<StatePostPage> {
                         values = "何も検知されませんでした";
                       }
                       val = values;
+                      vals = contentList;
+
+                      _isLoading = false;
                     });
                   },
-                  child: Text('上の画像をAPIに送信します')),
-              Text(val,style:TextStyle(fontSize: 15))
+                  child: _isLoading
+                      ? CircularProgressIndicator()
+                  : Text('上の画像をAPIに送信します')),
+              SizedBox(height: 20), // スペースを追加してタイトルと枠を分ける
+              const Text(
+                '照合結果',
+                style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
+              ),
+              Container(
+                width: 300.0,
+                height: 150.0,
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: Colors.black,
+                    width: 2.0,
+                  ),
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+                child: Text(val,style:TextStyle(fontSize: 15)
+                ),
+              ),
+              SizedBox(height: 20), // スペースを追加してタイトルと枠を分ける
+              const Text(
+                '文字認識結果',
+                style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
+              ),
+              Container(
+                width: 300.0,
+                height: 150.0,
+                margin: EdgeInsets.only(bottom: 16.0),
+               decoration: BoxDecoration(
+                  border: Border.all(
+                    color: Colors.black,
+                    width: 2.0,
+                  ),
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+                child: ListView.builder(
+                  itemCount: vals.length,
+                  itemBuilder: (BuildContext context, int index){
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 4.0).copyWith(left: 5.0),
+                      child: Text(vals[index]),
+                    );
+                  },
+                ),
+              ),
             ],
           ),
         ),
